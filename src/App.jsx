@@ -1,7 +1,9 @@
+import CustomRouter from "./router/CustomRouter"
+
 function App() {
  
   return (
-    <div>demo</div>
+    <CustomRouter/>
   )
 }
 

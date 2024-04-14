@@ -13,3 +13,6 @@
   /* overflow-x: hidden;   */
   font-family: 'Poppins', sans-serif;
 }
+body{
+  @apply bg-black;
+}
