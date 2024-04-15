@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CategoryCard from '../../components/categoryComponents/CategoryCard'
+import { useCategories } from '../../hooks/categories.hooks'
+import Loader from '../../components/common/Loader'
 
 function CategoryPage() {
-  const categories= [0,1,2,3,4]
+  const {data, isLoading}= useCategories()
+  console.log(data, isLoading, "categories chrck")
   return (
-    <div className='flex justify-between items-center flex-wrap overflow-x-hidden sm:px-5 px-4'>
+    isLoading===true?
+    <Loader/>
+    :
+    <div className='flex justify-between items-center flex-wrap overflow-x-hidden sm:px-5 px-4 pt-8'>
       {
-        categories.map((item, index)=>{
+        data.trivia_categories.map((item, index)=>{
           return(
             <div key={index} className=' w-1/5 mx-4'>
-              <CategoryCard/>
+              <CategoryCard name={item.name} number={index+1}/>
             </div>
           )
         })

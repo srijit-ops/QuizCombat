@@ -1,9 +1,12 @@
 import React from 'react'
 import { WavyBackground } from '../../components/landingComponents/WavyBackground'
 import { HoverBorderGradient } from '../../components/common/HoverBorderGradient'
+import { useNavigate } from 'react-router-dom'
 
 
 function LandingPage() {
+  const navigate= useNavigate()
+
   return (
     <div className='relative overflow-y-hidden'>
       <WavyBackground className="max-w-4xl mx-auto pb-40">
@@ -18,6 +21,7 @@ function LandingPage() {
         containerClassName="rounded-full"
         as="button"
         className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+        onClick={()=>navigate("/categories")}
       >
         <span>Get started ✨</span>
       </HoverBorderGradient>
