@@ -12,10 +12,10 @@ function CategoryPage() {
     :
     <div className='flex justify-between items-center flex-wrap overflow-x-hidden sm:px-5 px-4 pt-8'>
       {
-        data.trivia_categories.map((item, index)=>{
+        data?.trivia_categories.map((item, index)=>{
           return(
             <div key={index} className=' w-1/5 mx-4'>
-              <CategoryCard name={item.name} number={index+1}/>
+              <CategoryCard name={item.name} number={index+1} id={item.id}/>
             </div>
           )
         })

@@ -7,7 +7,7 @@ const Landing= lazy(()=>import("../pages/landing/LandingPage"))
 const Signin= lazy(()=> import("../pages/auth/SignIn"))
 const Signup= lazy(()=> import("../pages/auth/SignUp"))
 const Categorypage= lazy(()=> import("../pages/categories/CategoryPage"))
-const Quizpage= lazy(()=> import("../pages/quizFlow/QuizQandAPage"))
+const Quizpage= lazy(()=> import("../pages/quizFlow/QuizPage"))
 const Leaderboardpage= lazy(()=> import("../pages/quizFlow/LeaderboardPage"))
 const Layout= lazy(()=> import("../layout/LayoutComponent"))
 
@@ -34,7 +34,7 @@ const routeInfo=[
     layout:Layout
   },
   {
-    path:"/quiz/:quizId",
+    path:"/quiz",
     element:Quizpage,
     layout:Layout
   },

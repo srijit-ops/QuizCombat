@@ -2,7 +2,7 @@ import React from 'react'
 
 function LeaderboardPage() {
   return (
-    <div>LeaderboardPage</div>
+    <div className='text-white'>LeaderboardPage</div>
   )
 }
 
