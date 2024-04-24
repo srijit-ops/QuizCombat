@@ -7,9 +7,17 @@ import Loader from '../../components/common/Loader';
 
 function QuizPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [counter, setCounter]= useState(0)
+  const [counter, setCounter]= useState(() => {
+    // Initialize counter with the value from URL parameters, default to 0 if not present
+    return parseInt(searchParams.get('questionId')) || 0;
+  })
   const [timer, setTimer]=useState(10)
-  const [questionDetail, setQuestionDetail]= useState()
+  const [questionDetail, setQuestionDetail]= useState(null)
+  const [givenAns, setGivenAns] = useState(
+    // JSON.parse(localStorage.getItem("givenAns"))?.length>0?JSON.parse(localStorage.getItem("givenAns")):
+    [])
+  const [hasSubmitted, setHasSubmitted] = useState(false)
+  // const [incorrectAns, setIncorrectAns] = useState(null)
   const category= searchParams.get("category")
   const difficulty= searchParams.get("difficulty")
 
@@ -17,16 +25,19 @@ function QuizPage() {
    
 
     const query={
-        amount:2,
+        amount:3,
         category: category,
         difficulty:difficulty,  //as we know, the value of const cant be chnaged after once it's initialized, so here we should have got alswas "" in difficulty, but when we update the difficultylevel, the value of difficulty in query is also getting changed , how is this possible.
         type:"multiple"
       }
 
     const {data, isLoading, status}= useQuizDetails(serialize(query))
-
     
+      console.log(counter, timer, "refresh check")
+    console.log(hasSubmitted, givenAns, "submit ceck")
+
     useEffect(()=>{
+      console.log(timer, hasSubmitted, "bull")
       let interval
       if(data?.length>0 && status==="success" && counter<=data?.length){
         
@@ -35,56 +46,86 @@ function QuizPage() {
           return
         }
           interval= setInterval(()=>{
-            if(timer>0){
+            if(timer>0 && hasSubmitted==false){
+              console.log("in this")
               setTimer(prev=>prev-1)
             }
-            else{
+            // else if(timer>0 && hasSubmitted){
+
+            // }
+            else if(timer===0 || (timer>0 && hasSubmitted)){
+              console.log("in that")
               clearInterval(interval)
+              // if(hasSubmitted===false){
+              //   console.log("it's false")
+              //   setGivenAns(prev=>[...prev,
+              //     {
+              //       correctAns: questionDetail?.correct_answer,
+              //       givenAnswer: "NA"
+              //     }
+              //     ]
+                  
+                  
+              //     // [...prev, "NA"]
+              //   )
+              // }
               if(counter<data?.length){
                 setCounter(prev=>prev+1)
                 setTimer(10)
+                setHasSubmitted(false)
+                
               }
              else{
-              navigate("/score")
+              navigate("/score", {state: {finalGivenAns: givenAns}})
+              
             
              }
           
             }
+            // else if(timer===0 && hasSubmitted==false){
+
+            // }
           },1500)
       }
       return () => clearInterval(interval);
-    }, [data, status, timer, counter])
+    }, [data, status, timer, counter, givenAns])
 
     useEffect(() => {
       if(counter>0){
+        console.log(counter,"data again")
         setSearchParams({category:category,difficulty:difficulty,questionId:counter})
-        
-        for (const key in data){
-          if(counter-1==key){
-            setQuestionDetail(data[key])
-          }
-        }
-          
+        // setHasSubmitted(false)
+    
+            setQuestionDetail(data[counter-1])
       }
       
-    }, [counter])
-    
+    }, [counter, data])
+
+  
+
+    console.log(questionDetail, "qd")
+
+
+
+
+    // useEffect(()=>{
+    //   questionDetail?.incorrect_answers.push(questionDetail?.correct_answer)
+    //   // setIncorrectAns(questionDetail?.incorrect_answers)
+    //   // console.log(questionDetail?.incorrect_answers)
+    // }, [questionDetail])
 
     
-    console.log(data)
-    const newIncorrectAns= questionDetail?.incorrect_answers?.map((item, index)=>{
-      return item[key]
-    })
-    console.log(newIncorrectAns, "here")
-    const answers=[...newIncorrectAns,questionDetail?.correct_answer]
     
 
   return (
     isLoading===true?
     <Loader/>
     :
-    <div>
-      <Question question={questionDetail?.question} answers={answers} correctAns={questionDetail?.correct_answer}/>
+    <div className='sm:px-5 px-4 pt-8'>
+      {/* {console.log(incorrectAns, "ina")} */}
+      <Question question={questionDetail?.question} answer={questionDetail?.incorrect_answers} correctAns={questionDetail?.correct_answer} setGivenAns={setGivenAns} setHasSubmitted={setHasSubmitted} givenAns={givenAns} timer={timer} hasSubmitted={hasSubmitted}/>
+      {/* <button onClick={()=>setCounter(prev=>prev+1)} className='text-white'>next</button>
+      <button onClick={()=>setCounter(prev=>prev-1)} className='text-white'>prev</button> */}
     </div>
   )
 }

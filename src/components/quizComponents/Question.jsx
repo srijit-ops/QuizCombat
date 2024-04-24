@@ -1,27 +1,144 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Clock from './Clock';
+// import {
+//   CircularProgressbar,
+//   CircularProgressbarWithChildren,
+//   buildStyles,
+// } from "react-circular-progressbar";
+// import "react-circular-progressbar/dist/styles.css";
+// import GradientSVG from "../common/GradientSVG";
 
 
-function Question({question, answer, correctAns}) {
-  console.log(question, answer, correctAns,)
+function Question({question, answer, correctAns, setGivenAns, setHasSubmitted, givenAns, timer, hasSubmitted}) {
+  // console.log(question, answer, correctAns,)
+  // let allOpts
+  // useEffect(()=>{
+  //   if(answer && correctAns){
+      // answer.push(correctAns)
+
+    // let newOptions
+    const [newOptions, setNewOptions] = useState(null)
+
+    const [checkboxes, setCheckboxes] = useState({
+      "checkbox0": false,
+      "checkbox1": false,
+      "checkbox2": false,
+      "checkbox3": false,
+    });
+
+    function shuffleArray(array) {
+      const newArray = [...array]; // Create a copy of the original array
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // Generate a random index
+        // Swap elements at indices i and j
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+
+
+    // if(answer && correctAns){
+    //   newOptions=shuffleArray([...answer,correctAns])
+    //   console.log(newOptions)
+    // }
+    
+
+    useEffect(()=>{
+      if(answer && correctAns){
+        setNewOptions(shuffleArray([...answer,correctAns]))
+        // console.log(newOptions)
+      }
+    }, [question])
+  //   }
+   
+  // },[])
+    useEffect(()=>{
+      if(hasSubmitted===false && timer===0){
+        setGivenAns(prev=>[...prev,
+          {
+            correctAns: correctAns,
+            givenAnswer: "NA"
+          }
+          ]
+          
+          
+          // [...prev, "NA"]
+        )
+        // localStorage.setItem("givenAns",JSON.stringify(givenAns)) //if we want to use local storage to store the answers then we dint need to send the data to the score orute in a state, we can directly retruve the answers in score route from local storage, but for now avoiding it.
+      }
+    }, [timer])
+
+    const handleSubmit=(option, checkboxName)=>{
+      setGivenAns(prev=>[...prev,
+        {
+          correctAns: correctAns,
+          givenAnswer: option
+        }
+        ])
+        // localStorage.setItem("givenAns",JSON.stringify(givenAns))
+      setHasSubmitted(true)
+      // setCheckboxes(prev=>(
+      //   {
+      //     ...prev,
+      //     checkboxName:true
+      //   }
+      // ))
+      // e.target.checked= false
+    }
+
+
   return (
-    <div>
-      <h1 className='text-white'>Timer</h1>
-      <h3>{question}</h3>
-      <div className='flex justify-between items-center flex-wrap'>
-        {
-          answer?.slice(0,2).map((item, index)=>{
-            <div>{item}</div>
-          })
-        }
+    <div className='flex justify-center items-center flex-col'>
+      {/* <h1 className='text-white'>Timer</h1> */}
+      <Clock timer={timer}/>
+      <h3 className='text-gray-300 mb-12 text-xl tracking-wider'>{question}</h3>
+
+      {console.log(newOptions)}
+      <div className='flex justify-around items-center flex-wrap w-full gap-8'> 
+
+      {
+        newOptions?.map((item, index)=>{
+          // console.log(index)
+          return (
+            <div className={`flex justify-start items-center bg-[#151414] px-4 py-2 w-5/12 rounded-md cursor-pointer hover:bg-[#272523] text-white focus:${item===correctAns?"bg-[#168e14]":"bg-[#F4511E]"}`} key={`${item}-${index}`}>
+              <input
+              id={`${item}-${index}`}
+                  type="radio"
+                  name="answer"
+                  value={item}
+                  onChange={() =>
+                    handleSubmit(item, `checkbox${index}`)
+                  }
+                />
+              <label htmlFor={`${item}-${index}`} className='m-6'>{item}</label>
+            </div>
+          )
+        })
+      }
       </div>
-      <div className='flex justify-between items-center flex-wrap'>
-        {
-          answer?.slice(2,4).map((item, index)=>{
-            <div>{item}</div>
-          })
-        }
-      </div>
-      <button>Next</button>
+      {/* <div className='flex justify-between items-center flex-wrap w-2/5 gap-8'> 
+
+      {
+        newOptions?.slice(2,4).map((item, index)=>{
+          console.log(index)
+          return (
+            <div className='flex justify-start items-center'>
+              <input
+                  type="checkbox"
+                  name={item}
+                  value={item}
+                  onChange={() =>
+                    handleSubmit(item)
+                  }
+                />
+              <p className='text-white m-6'>{item}</p>
+            </div>
+          )
+        })
+      }
+      </div> */}
+      
+      {/* <button className='text-white'>Next</button> */}
     </div>
   )
 }
