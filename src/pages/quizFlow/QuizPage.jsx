@@ -95,15 +95,22 @@ function QuizPage() {
         console.log(counter,"data again")
         setSearchParams({category:category,difficulty:difficulty,questionId:counter})
         // setHasSubmitted(false)
-    
-            setQuestionDetail(data[counter-1])
+        // for (const key in data){
+        //   if(counter-1==key){
+        //     setQuestionDetail(data[key])
+        //   }
+        // }
+            if(data){
+              setQuestionDetail(data[counter-1])
+            }
+            
       }
       
     }, [counter, data])
 
   
 
-    console.log(questionDetail, "qd")
+    console.log(data, "qd")
 
 
 
