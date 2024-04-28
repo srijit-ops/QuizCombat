@@ -5,7 +5,6 @@ import Loader from '../../components/common/Loader'
 
 function CategoryPage() {
   const {data, isLoading}= useCategories()
-  console.log(data, isLoading, "categories chrck")
   return (
     isLoading===true?
     <Loader/>

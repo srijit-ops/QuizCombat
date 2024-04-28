@@ -33,11 +33,10 @@ function QuizPage() {
 
     const {data, isLoading, status}= useQuizDetails(serialize(query))
     
-      console.log(counter, timer, "refresh check")
-    console.log(hasSubmitted, givenAns, "submit ceck")
+     
 
     useEffect(()=>{
-      console.log(timer, hasSubmitted, "bull")
+
       let interval
       if(data?.length>0 && status==="success" && counter<=data?.length){
         
@@ -47,14 +46,12 @@ function QuizPage() {
         }
           interval= setInterval(()=>{
             if(timer>0 && hasSubmitted==false){
-              console.log("in this")
               setTimer(prev=>prev-1)
             }
             // else if(timer>0 && hasSubmitted){
 
             // }
             else if(timer===0 || (timer>0 && hasSubmitted)){
-              console.log("in that")
               clearInterval(interval)
               // if(hasSubmitted===false){
               //   console.log("it's false")
@@ -92,7 +89,6 @@ function QuizPage() {
 
     useEffect(() => {
       if(counter>0){
-        console.log(counter,"data again")
         setSearchParams({category:category,difficulty:difficulty,questionId:counter})
         // setHasSubmitted(false)
         // for (const key in data){
@@ -107,11 +103,6 @@ function QuizPage() {
       }
       
     }, [counter, data])
-
-  
-
-    console.log(data, "qd")
-
 
 
 

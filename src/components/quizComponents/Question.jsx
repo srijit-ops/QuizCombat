@@ -1,22 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Clock from './Clock';
-// import {
-//   CircularProgressbar,
-//   CircularProgressbarWithChildren,
-//   buildStyles,
-// } from "react-circular-progressbar";
-// import "react-circular-progressbar/dist/styles.css";
-// import GradientSVG from "../common/GradientSVG";
+
 
 
 function Question({question, answer, correctAns, setGivenAns, setHasSubmitted, givenAns, timer, hasSubmitted}) {
-  // console.log(question, answer, correctAns,)
-  // let allOpts
-  // useEffect(()=>{
-  //   if(answer && correctAns){
-      // answer.push(correctAns)
 
-    // let newOptions
     const [newOptions, setNewOptions] = useState(null)
 
     const [checkboxes, setCheckboxes] = useState({
@@ -39,14 +27,13 @@ function Question({question, answer, correctAns, setGivenAns, setHasSubmitted, g
 
     // if(answer && correctAns){
     //   newOptions=shuffleArray([...answer,correctAns])
-    //   console.log(newOptions)
+
     // }
     
 
     useEffect(()=>{
       if(answer && correctAns){
         setNewOptions(shuffleArray([...answer,correctAns]))
-        // console.log(newOptions)
       }
     }, [question])
   //   }
@@ -93,12 +80,10 @@ function Question({question, answer, correctAns, setGivenAns, setHasSubmitted, g
       <Clock timer={timer}/>
       <h3 className='text-gray-300 mb-12 text-xl tracking-wider'>{question}</h3>
 
-      {console.log(newOptions)}
       <div className='flex justify-around items-center flex-wrap w-full gap-8'> 
 
       {
         newOptions?.map((item, index)=>{
-          // console.log(index)
           return (
             <div className={`flex justify-start items-center bg-[#151414] px-4 py-2 w-5/12 rounded-md cursor-pointer hover:bg-[#272523] text-white focus:${item===correctAns?"bg-[#168e14]":"bg-[#F4511E]"}`} key={`${item}-${index}`}>
               <input
@@ -116,29 +101,7 @@ function Question({question, answer, correctAns, setGivenAns, setHasSubmitted, g
         })
       }
       </div>
-      {/* <div className='flex justify-between items-center flex-wrap w-2/5 gap-8'> 
-
-      {
-        newOptions?.slice(2,4).map((item, index)=>{
-          console.log(index)
-          return (
-            <div className='flex justify-start items-center'>
-              <input
-                  type="checkbox"
-                  name={item}
-                  value={item}
-                  onChange={() =>
-                    handleSubmit(item)
-                  }
-                />
-              <p className='text-white m-6'>{item}</p>
-            </div>
-          )
-        })
-      }
-      </div> */}
-      
-      {/* <button className='text-white'>Next</button> */}
+     
     </div>
   )
 }
